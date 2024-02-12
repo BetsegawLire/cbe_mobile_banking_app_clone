@@ -3,6 +3,7 @@ import 'package:cbe_mobile_banking/custome_alert_dialog.dart';
 import 'package:cbe_mobile_banking/models/transfer_model.dart';
 import 'package:cbe_mobile_banking/select_receiver.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TransferAmount extends StatefulWidget {
   final String accountName;
@@ -20,6 +21,34 @@ class _TransferAmountState extends State<TransferAmount> {
   TextEditingController remarkController = new TextEditingController();
 
   bool _isButtonEnabled = false;
+  int? balance;
+
+  @override
+  void initState() {
+    getSharedPrefs();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void getSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      balance = prefs.getInt("balance");
+    });
+  }
+
+  void setNewBalance(int amount) async {
+    // getSharedPrefs();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      balance = balance! - amount;
+      prefs.setInt("balance", balance!);
+    });
+    print("deducted");
+    print(balance);
+  }
 
   void _validateInput(String value) {
     setState(() {
@@ -50,26 +79,32 @@ class _TransferAmountState extends State<TransferAmount> {
           // Handle cancel action
         },
         onContinue: () {
-          print("object");
-          Navigator.pop(context);
+          if (int.parse(amountController.text) > balance!) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Your balance is insufficient")));
+            Navigator.pop(context);
+          } else {
+            setNewBalance(int.parse(amountController.text));
+            Navigator.pop(context);
 
-          showDialog(
-            context: context,
-            builder: (context) => ConfirmAlert(
-              accountName: widget.accountName.toUpperCase(),
-              accountNumber: widget.accountNumber,
-              amount: amountController.text,
-              reason: remarkController.text,
-              onCancel: () {
-                Navigator.pop(context);
-                // Handle cancel action
-              },
-              onContinue: () {
-                Navigator.pop(context);
-                // Handle continue action
-              },
-            ),
-          );
+            showDialog(
+              context: context,
+              builder: (context) => ConfirmAlert(
+                accountName: widget.accountName.toUpperCase(),
+                accountNumber: widget.accountNumber,
+                amount: amountController.text,
+                reason: remarkController.text,
+                onCancel: () {
+                  Navigator.pop(context);
+                  // Handle cancel action
+                },
+                onContinue: () {
+                  Navigator.pop(context);
+                  // Handle continue action
+                },
+              ),
+            );
+          }
           // Handle continue action
         },
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomAlertDialog extends StatefulWidget {
   final String accountName;
@@ -23,6 +24,7 @@ class CustomAlertDialog extends StatefulWidget {
 
 class _CustomAlertDialogState extends State<CustomAlertDialog> {
   String? lastFourCharacters;
+  int? balance;
 
   @override
   initState() {
@@ -37,6 +39,12 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       // Handle cases where the input string is less than 4 characters
       return "Input string is too short!";
     }
+  }
+
+  void getSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    balance = prefs.getInt("balance");
   }
 
   @override

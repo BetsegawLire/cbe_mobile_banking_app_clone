@@ -1,6 +1,7 @@
 import 'package:cbe_mobile_banking/models/service.dart';
 import 'package:cbe_mobile_banking/transfer.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -150,6 +151,10 @@ class HomeScreen2 extends StatefulWidget {
 
 class _HomeScreen2State extends State<HomeScreen2> {
   bool _isVisible = false;
+  String? name;
+  int? balance;
+  String? accountNumber;
+
   List<Service> services = [
     Service(
         label: "Transfer",
@@ -209,6 +214,82 @@ class _HomeScreen2State extends State<HomeScreen2> {
           size: 40,
         )),
   ];
+  String getMonthName(int month) {
+    final now = DateTime.now();
+    if (month == 1) {
+      return "Jan";
+    } else if (month == 2) {
+      return "Feb";
+    } else if (month == 3) {
+      return "Mar";
+    } else if (month == 4) {
+      return "Apr";
+    } else if (month == 5) {
+      return "May";
+    } else if (month == 6) {
+      return "Jun";
+    } else if (month == 7) {
+      return "Jul";
+    } else if (month == 8) {
+      return "Aug";
+    } else if (month == 9) {
+      return "Sep";
+    } else if (month == 10) {
+      return "Oct";
+    } else if (month == 11) {
+      return "Nov";
+    } else if (month == 12) {
+      return "Dec";
+    }
+    return "";
+  }
+
+  String getAMPM(int hour) {
+    if (hour < 12) {
+      return "AM";
+    } else {
+      return "PM";
+    }
+  }
+
+  String getMinute(int minute) {
+    if (minute < 10) {
+      return "0$minute";
+    } else {
+      return "$minute";
+    }
+  }
+
+  void initSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setString("name", "Betsegaw Lire Garedew");
+      balance = prefs.getInt("balance");
+      if (balance == null) {
+        prefs.setInt("balance", 1000);
+      }
+      prefs.setString("account", "1000301476497");
+    });
+  }
+
+  void getSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      name = prefs.getString("name");
+      balance = prefs.getInt("balance");
+      accountNumber = prefs.getString("account");
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    initSharedPrefs();
+
+    super.initState();
+    getSharedPrefs();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +386,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        _isVisible ? "3250 Br." : "***** Br.",
+                        _isVisible ? "$balance Br." : "***** Br.",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -336,7 +417,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                         TextStyle(color: Colors.amber.shade300, fontSize: 16),
                   ),
                   Text(
-                    "Feb 10, 2024 8:51:22 AM",
+                    "${getMonthName(DateTime.now().month)} ${DateTime.now().day}, ${DateTime.now().year} ${DateTime.now().hour}:${getMinute(DateTime.now().minute)}:${getMinute(DateTime.now().second)} ${getAMPM(DateTime.now().hour)}",
                     style: TextStyle(color: Colors.white),
                   ),
                 ],
