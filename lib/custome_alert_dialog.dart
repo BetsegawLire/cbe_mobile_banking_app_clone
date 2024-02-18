@@ -82,7 +82,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
             ),
             // SizedBox(height: 16),
             Text(
-              "Debit Acc: ${widget.accountName}",
+              "Debit Acc: Betsegaw Lire Garedew",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(

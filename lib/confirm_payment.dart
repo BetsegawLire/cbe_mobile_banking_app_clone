@@ -183,10 +183,10 @@ class _ConfirmAlertState extends State<ConfirmAlert> {
             ),
             // SizedBox(height: 16),
             Text(
-              "ETB ${widget.amount} debited from ${widget.accountName}-ETB-$lastFourCharacters for 364831996497 (A2A) on ${DateTime.now().day}-${getMonthName(DateTime.now().month)}-${DateTime.now().year} with transaction ID: FT24006Z70N6.",
+              "ETB ${widget.amount} debited from BETSEGAW LIRE GAREDEW for ${widget.accountName}-ETB-$lastFourCharacters (${widget.reason} done via Mobile) on ${DateTime.now().day}-${getMonthName(DateTime.now().month)}-${DateTime.now().year} with transaction ID: FT24006Z70N6.",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 15,
+                // fontSize: 15,
               ),
             ),
             Padding(
@@ -219,7 +219,7 @@ class _ConfirmAlertState extends State<ConfirmAlert> {
               ),
             ),
             SizedBox(
-              height: 40,
+              height: 30,
             ),
             Container(
               // height: 0,
