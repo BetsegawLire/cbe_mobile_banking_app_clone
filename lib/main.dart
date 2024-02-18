@@ -159,7 +159,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
     Service(
         label: "Transfer",
         icon: Icon(
-          Icons.share,
+          Icons.send,
           color: Colors.purple,
           size: 40,
         ),
